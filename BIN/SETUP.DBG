@@ -1,0 +1,604 @@
+configfile
+paint all plain menu white on blue
+paint all standout menu bright white on blue
+paint all disabled menu grey on blue
+paint all active menu bright white on black
+paint all active standout menu yellow on black
+paint all frame menu yellow on blue
+paint all disabled title grey on bright white
+paint all active frame yellow on cyan
+paint all disabled frame grey on bright white
+paint all icon bright white on red
+paint all active disabled menu grey on black
+paint all plain grey on black
+paint all active black on bright white
+paint all selected bright white on black
+paint all standout bright white on red
+paint all button red on bright white
+paint all active standout red on bright white
+paint status bright white on blue
+paint dialog plain white on blue
+paint dialog frame blue on cyan
+paint dialog shadow black on blue
+paint dialog plain button blue on white
+paint dialog standout button bright white on white
+paint dialog active button blue on cyan
+paint dialog active standout button bright white on cyan
+display all /close
+display status
+display file /close 0,0,10000,9984
+display stack /close 8000,4992,2000,4992
+display watch /open 4000,5408,4000,4576
+display register /open 0,5408,4000,4576
+display assembly /open 0,0,10000,5408
+display locals /open 0,5408,4000,4576
+display modules /open 8000,5408,2000,4576
+display source /open 0,0,10000,5408
+font all {-13 0 0 0 400 0 0 0 0 1 2 1 49 "Courier"}
+font memory {-12 0 0 0 400 0 0 0 0 1 2 1 49 "Fixedsys"}
+set autosave off
+set assembly source hexadecimal Intel/Lower Intel/Outside 
+set variable partial nocode noinherit nocompiler members private protected nostatic 
+set variable partial nocode noinherit nocompiler members private protected nostatic 
+set functions all 
+set globals all 
+set modules typed 
+set register Intel/Hexadecimal Intel/Normal Intel/User 
+set fpu Intel/Decimal 
+set mmx 
+set xmm 
+set bell on
+set dclick 300
+set implicit on
+set radix 10
+set recursion on
+set search /caseignore/norx {^$\.[(|?+*~@}
+set source {.}
+set source /add {C:\LIBSRC\}
+set source /add {C:\EXAMPLES\}
+set source /add {C:\ED\}
+set symbol /ignore {*}
+set symbol /add /ignore {*_}
+set symbol /add /ignore {_*}
+set tab 8
+set types {
+}
+set macro source v {
+    accel {
+        &Module
+    }
+    
+}
+set macro assembly v {
+    accel {
+        &Module
+    }
+    
+}
+set macro all v {
+    dis source;accel {
+        &Module
+    }
+    
+}
+set macro all ? {
+    display watch; accel {
+        &New
+    }
+    
+}
+set macro all e {
+    accelerate main {
+        &Data
+    }
+    {
+        &Memory at
+    }
+    
+}
+set macro all i {
+    accelerate main {
+        &Run
+    }
+    {
+        &Trace into
+    }
+    
+}
+set macro all x {
+    accelerate main {
+        &Run
+    }
+    {
+        &Next sequential
+    }
+    
+}
+set macro all { } {
+    accelerate main {
+        &Run
+    }
+    {
+        &Step over
+    }
+    
+}
+set macro all g {
+    accelerate main {
+        &Run
+    }
+    {
+        E&xecute to
+    }
+    
+}
+set macro all b {
+    accelerate main {
+        &Break
+    }
+    {
+        &New
+    }
+    
+}
+set macro all t {
+    accelerate main {
+        &Break
+    }
+    {
+        &Toggle
+    }
+    
+}
+set macro all : {
+    accelerate main {
+        &File
+    }
+    {
+        &Command
+    }
+    
+}
+set macro all / {
+    accel main {
+        &Search
+    }
+    {
+        &Find
+    }
+    
+}
+set macro all n {
+    accelerate main {
+        &Search
+    }
+    {
+        &Next
+    }
+    
+}
+set macro all N {
+    accelerate main {
+        &Search
+    }
+    {
+        &Previous
+    }
+    
+}
+set macro all u {
+    accelerate main {
+        &Undo
+    }
+    {
+        &Undo
+    }
+    
+}
+set macro all U {
+    accelerate main {
+        &Undo
+    }
+    {
+        &Redo
+    }
+    
+}
+set macro all j {
+    Window CursorDown
+}
+set macro all k {
+    Window CursorUp
+}
+set macro all h {
+    Window CursorLeft
+}
+set macro all l {
+    Window CursorRight
+}
+set macro all . {
+    Window Popup
+}
+set macro all = {
+    accel main {
+        &Search
+    }
+    {
+        &Match
+    }
+    
+}
+set macro all CTRL-z {
+    accel main {
+        &Window
+    }
+    {
+        &Zoom
+    }
+    
+}
+set macro all CTRL-UP {
+    accel main {
+        &Undo
+    }
+    {
+        U&nwind Stack
+    }
+    
+}
+set macro all CTRL-DOWN {
+    accel main {
+        &Undo
+    }
+    {
+        R&ewind Stack
+    }
+    
+}
+set macro all CTRL-LEFT {
+    accel main {
+        &Undo
+    }
+    {
+        &Undo
+    }
+    
+}
+set macro all CTRL-RIGHT {
+    accel main {
+        &Undo
+    }
+    {
+        &Redo
+    }
+    
+}
+set macro all CTRL-BACKSPACE {
+    accel main {
+        &Undo
+    }
+    {
+        &Home
+    }
+    
+}
+set macro all ALT-F10 {
+    Window PopUp
+}
+set macro all CTRL-F6 {
+    Window Next
+}
+set macro all CTRL-TAB {
+    Window Next
+}
+set macro all F1 {
+    help
+}
+set macro all F2 {
+    accel main {
+        &Data
+    }
+    {
+        &Register
+    }
+    
+}
+set macro all F3 {
+    if ( dbg$src ) {
+        display source/close;display locals/close;display register;display assembly
+    }
+    else {
+        display assembly/close;display register/close;display locals;display source
+    }
+    
+}
+set macro all F4 {
+    accel main {
+        &Window
+    }
+    {
+        A&pplication
+    }
+    
+}
+set macro all F5 {
+    accel main {
+        &Run
+    }
+    {
+        &Go
+    }
+    
+}
+set macro all F6 {
+    accel main {
+        &Window
+    }
+    {
+        Next
+    }
+    
+}
+set macro all F7 {
+    accel main {
+        &Run
+    }
+    {
+        Run to &Cursor
+    }
+    
+}
+set macro all F8 {
+    accel main {
+        &Run
+    }
+    {
+        &Trace Into
+    }
+    
+}
+set macro all F9 {
+    accel main {
+        &Break
+    }
+    {
+        &Toggle
+    }
+    
+}
+set macro all F10 {
+    accel main {
+        &Run
+    }
+    {
+        &Step Over
+    }
+    
+}
+set macro all ALT-1 {
+    accel main {
+        &Data
+    }
+    {
+        &Locals
+    }
+    
+}
+set macro all ALT-2 {
+    accel main {
+        &Data
+    }
+    {
+        &Watch
+    }
+    
+}
+set macro all ALT-3 {
+    accel main {
+        &Code
+    }
+    {
+        &Source
+    }
+    
+}
+set macro all ALT-4 {
+    accel main {
+        &File
+    }
+    {
+        &View
+    }
+    
+}
+set macro all ALT-5 {
+    accel main {
+        &Data
+    }
+    {
+        &Memory at
+    }
+    
+}
+set macro all ALT-6 {
+    accel main {
+        &Data
+    }
+    {
+        &Memory at
+    }
+    
+}
+set macro all ALT-7 {
+    accel main {
+        &Data
+    }
+    {
+        &Register
+    }
+    
+}
+set macro all ALT-8 {
+    accel main {
+        &Data
+    }
+    {
+        &FPU Registers
+    }
+    
+}
+set macro all ALT-9 {
+    accel main {
+        &File
+    }
+    {
+        &Command
+    }
+    
+}
+set macro all CTRL-F4 {
+    Window Close
+}
+set macro all CTRL-F5 {
+    Window Restore
+}
+set macro all CTRL-F7 {
+    print {
+        Window Move HotKey not implemented
+    }
+    
+}
+set macro all CTRL-F8 {
+    print {
+        Window Size HotKey not implemented
+    }
+    
+}
+set macro all CTRL-F9 {
+    Window Minimize
+}
+set macro all CTRL-F10 {
+    Window Maximize
+}
+set macro all ALT-F5 {
+    print {
+        Window Cascade HotKey not implemented
+    }
+    
+}
+set macro source CTRL-\ {
+    accel main {
+        &Search
+    }
+    {
+        &Next
+    }
+    
+}
+set macro all ALT-/ {
+    accel main {
+        &Search
+    }
+    {
+        &Next
+    }
+    
+}
+set macro watch DELETE {
+    accel {
+        &Delete
+    }
+    
+}
+set macro watch INSERT {
+    accel {
+        &New
+    }
+    
+}
+set macro all SHIFT-F5 {
+    print {
+        Window Tile HotKey not implemented
+    }
+    
+}
+set macro all SHIFT-F6 {
+    Window Previous
+}
+set macro all SHIFT-F9 {
+    display watch; accel {
+        &New
+    }
+    
+}
+set supportroutine {__U8M}{__U8FS}{__U8FD}{__U8D}{__U8DR}{__U8DRE}{__U8DQ}
+set supportroutine {__U8DQE}{__U4M}{__U4FS}{__U4FD}{__U4D}{__TNK}{__TNC}
+set supportroutine {__STK}{__SCN4}{__SCN2}{__SCN1}{__RSU4}{__RSI4}{__RDU4}
+set supportroutine {__RDI4}{__RDFS}{__PTS}{__PTC}{__PRO}{__PIS}{__PIA}
+set supportroutine {__I8M}{__I8FS}{__I8FD}{__I8D}{__I8DR}{__I8DRE}{__I8DQ}
+set supportroutine {__I8DQE}{__I4M}{__I4FS}{__I4FD}{__I4D}{__GRO}{__GETDS}
+set supportroutine {__FSU8}{__FSU4}{__FSS}{__FSN}{__FSM}{__FSI8}{__FSI4}
+set supportroutine {__FSFD}{__FSD}{__FSC}{__FSA}{__FlatToFar16}{__FDU8}
+set supportroutine {__FDU4}{__FDS}{__FDN}{__FDM}{__FDI8}{__FDI4}{__FDFS}
+set supportroutine {__FDD}{__FDC}{__FDA}{__Far16ToFlat}{__Far16Pascal2}
+set supportroutine {__Far16Func2}{__Far16Cdecl2}{__EPI}{__EDS}{__EDM}{__EDD}
+set supportroutine {__EDC}{__EDA}{__CHP}{__CHK}{RT@*}{IF@*}{__wcpp_*}
+set breakonwrite off
+set dontexpandhex off
+flip on
+hook progstart {
+    if _dbg@dbg$loaded && !?_dbg@nogo {
+        if ?@@fmain {
+            if !?@@fwinmain {
+                go/until/noflip @@fmain
+            }
+            else {
+                go/until @@fmain
+            }
+        }
+        elseif ?@@main {
+            if !?@@winmain {
+                go/until/noflip @@main
+            }
+            else {
+                go/until @@main
+            }
+        }
+        elseif ?@@fwinmain {
+            go/until/noflip @@fwinmain
+        }
+        elseif ?@@winmain {
+            go/until/noflip @@winmain
+        }
+        elseif _dbg@dbg$os == 12 && ?@main {
+            go/until/noflip @main
+        }
+    }
+    ;
+}
+hook progend {
+    
+}
+hook dllstart {
+    
+}
+hook dllend {
+    
+}
+hook execstart {
+    
+}
+hook execend {
+    
+}
+hook sourceinfo {
+    display locals; display source
+}
+hook assemblyinfo {
+    display register; display assembly
+}
+hook modulechange {
+    
+}
+hook quit {
+}

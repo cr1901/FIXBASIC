@@ -1,0 +1,104 @@
+MODELCHR=S
+MODELSTR=small
+
+#Directories
+SOURCES = .\TSRLIB\;.\$(SRCDIR)\
+#tcp_h_dir = ..\..\TCPINC\
+#tcp_SOURCESS = ..\..\TCPLIB\
+HEADERS = .\TSRLIB\;.\$(SRCDIR)\
+
+NASM_INCLUDE = $(HEADERS:;= -i)
+WATCOM_INCLUDE = -i=$(HEADERS: =;)
+
+#RELEASE must be defined due to the TSR libraries linked against.
+#C Compiler.
+CC=wcc
+CFLAGS=-0 -bt=dos -m$(MODELCHR) -dRELEASE -I.;$(HEADERS) -q -s -oh -os
+
+#MASM-Compatible Assembler
+AS=wasm
+AFLAGS=-m$(MODELCHR) -zq -I.;$(HEADERS)
+
+#Netwide Assembler
+NASM=nasm
+NASMFLAGS=-f obj -dRELEASE -i. -i$(NASM_INCLUDE) -Worphan-labels -O9
+
+#C++ Compiler
+CPP=wpp
+CPPFLAGS=-0 -m$(MODELCHR) -q -d__DOS__ -dCFG_H="nwprint.cfg" -ecw -I.;$(HEADERS)
+
+#Librarian
+LIB=wlib
+LIBFLAGS= -q
+LIBNAME=tsr
+
+#Linker
+LINKER=wlink
+LFLAGS=system dos option quiet
+
+#Files
+#TCPOBJS=packet.obj arp.obj eth.obj ip.obj tcp.obj tcpsockm.obj udp.obj utils.obj dns.obj timer.obj ipasm.obj
+#TSROBJS=tsrresic.obj tsrplex.obj handlers.obj biosndos.obj
+
+#MUST BE LINKED IN ORDER! "HANDLERS.C" MUST BE LINKED AFTER ALL OTHER RESIDENT CODE!
+TSROBJS=tsrresic.obj tsrplex.obj
+#LIBNAME=tsr
+EXES=watclock.exe fixbasic.exe
+
+#Other variables
+FIXBASIC_PATCH_OFFSET=64
+
+
+all: .symbolic
+	for %i in ($(EXES:.exe= )) do wmake.exe -a -z %i.exe SRCDIR=%i 
+
+.asm: $(SOURCES)
+
+.c: $(SOURCES)
+
+.cpp: $(SOURCES)
+
+#Symbolic only because of the directory structure and potential naming conflicts.
+.asm.obj:
+	$(NASM) -o$@ $(NASMFLAGS) $[@ 
+
+.c.obj:
+	$(CC) -fo=$@ $(CFLAGS) $[*
+
+.cpp.obj:
+	$(CPP) -fo=$@ $(CPPFLAGS) $[*
+	
+#All other exes	link against a single object file.
+#.obj.exe:
+#	$(LINKER) $(LFLAGS) name $*.EXE library{$(LIBNAME).LIB} file{$*.obj}
+
+#TSR library courtesy: http://www.vintage-computer.com/vcforum/showthread.php?23233-TSR-programs-with-Open-Watcom
+watclock.exe:  $(TSROBJS) biosndos.obj handlers.obj mainc.obj 
+	$(LINKER) $(LFLAGS) name $@ file{$(TSROBJS) biosndos.obj handlers.obj mainc.obj} option map=.\BIN\watclock.map	
+	
+fixbasic.exe:  overlay.exe basic.obj $(TSROBJS) handlers.obj mainc.obj 
+	$(LINKER) $(LFLAGS) name $@ file{basic.obj $(TSROBJS) handlers.obj mainc.obj} option map=.\BIN\fixbasic.map	
+	overlay.exe fixbasic.exe .\bin\BASIC8.BIN $(FIXBASIC_PATCH_OFFSET)
+
+#overlay.exe is a Windows executable- requires different switches.
+overlay.obj: overlay.c
+	wcc386 -fo=$@ -bt=nt -bc -q $[*
+
+overlay.exe: overlay.obj
+	$(LINKER) system nt name $@ file{$*.obj}
+	
+#$(LIBNAME).LIB : $(TSROBJS)
+#	$(LIB) $(LIBFLAGS) $(LIBNAME) +$(TSROBJS)	
+
+#Assume BIN directory exists.
+redo: clean all install
+
+install: .symbolic
+	copy /Y *.EXE .\Bin
+
+dbg-clean: .symbolic
+	del *.obj *.lib *.exe
+
+clean: .symbolic
+	del *.obj *.lib *.err *.exe	
+
